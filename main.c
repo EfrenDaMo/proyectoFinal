@@ -24,7 +24,6 @@ int main(void) {
     do {
         int salir = 0;
         int errores = 0;
-        int archivo_valido = 0;
 
         int numero_aleatorio = generar_numero();
 
@@ -38,27 +37,27 @@ int main(void) {
         switch (categoria) {
             case 'a':
                 archivo_frase = "./categorias/anime.txt";
-                archivo_pista = "./pista/anime.txt";
+                archivo_pista = "./pistas/anime.txt";
                 break;
 
             case 'b':
                 archivo_frase = "./categorias/municipios.txt";
-                archivo_pista = "./pista/municipios.txt";
+                archivo_pista = "./pistas/municipios.txt";
                 break;
 
             case 'c':
                 archivo_frase = "./categorias/peliculas.txt";
-                archivo_pista = "./pista/peliculas.txt";
+                archivo_pista = "./pistas/peliculas.txt";
                 break;
 
             case 'd':
                 archivo_frase = "./categorias/musica.txt";
-                archivo_pista = "./pista/musica.txt";
+                archivo_pista = "./pistas/musica.txt";
                 break;
 
             case 'e':
                 archivo_frase = "./categorias/paises.txt";
-                archivo_pista = "./pista/paises.txt";
+                archivo_pista = "./pistas/paises.txt";
                 break;
 
             default:
@@ -71,7 +70,11 @@ int main(void) {
             printf("Ocurrio un error al abrir el archivo\n");
             return 2;
         }
-        char* pista = "**En Desarrollo al momento**";
+        char* pista = obtener_de_archivo(archivo_pista, numero_aleatorio);
+        if (pista == NULL) {
+            printf("Ocurrio un error al abrir el archivo\n");
+            return 2;
+        }
 
         char* lista_letras = listar_letras(frase);
         if (lista_letras == NULL) {
@@ -145,6 +148,8 @@ int main(void) {
 
         } while (salir != 1);
 
+        free(frase);
+        free(pista);
         free(lista_corr);
         free(lista_inco);
         free(lista_letras);
@@ -210,7 +215,7 @@ char* organizar_lista(char* lista) {
 }
 
 char* obtener_de_archivo(char* ruta_archivo, int numero_linea) {
-    const int TAM_MAX = 60;
+    const int TAM_MAX = 212;
 
     int tam_regreso = 1;
     int contador_linea = 0;
@@ -231,10 +236,8 @@ char* obtener_de_archivo(char* ruta_archivo, int numero_linea) {
     while (fgets(linea, TAM_MAX, archivo) != NULL) {
         contador_linea++;
 
-        // Se compara si es la linea deseada con el numero aleatorio
         if (contador_linea == numero_linea) {
-            printf("Línea %d: %s", contador_linea, linea);
-            break; //Sale del bucle 'while'
+            break; 
         }
     }
 
