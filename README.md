@@ -15,8 +15,6 @@ Uno recreacion del juego conocido como **"El Ahorcado"** en la terminal utilizan
 
 - [Manejo de archivos](#impresion-de-la-interfaz)
 
-[Documentación](#documentación)
-
 ## Que es "El ahorcado"
 
 El ahorcado es un juego que puede ser jugado por dos o más jugadores. Donde se establece una palabra o frase por un jugador, y los demas jugadores deben de adivinarla una letra a la vez. 
