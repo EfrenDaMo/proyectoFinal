@@ -67,18 +67,18 @@ int main(void) {
 
         char* frase = obtener_de_archivo(archivo_frase, numero_aleatorio);
         if (frase == NULL) {
-            printf("Ocurrio un error al abrir el archivo\n");
+            printf("Ocurrió un error al abrir el archivo\n");
             return 2;
         }
         char* pista = obtener_de_archivo(archivo_pista, numero_aleatorio);
         if (pista == NULL) {
-            printf("Ocurrio un error al abrir el archivo\n");
+            printf("Ocurrió un error al abrir el archivo\n");
             return 2;
         }
 
         char* lista_letras = listar_letras(frase);
         if (lista_letras == NULL) {
-            printf("Ocurrio un error al asignar memoria \n");
+            printf("Ocurrió un error al asignar memoria \n");
             return 1;
         }
         lista_letras = organizar_lista(lista_letras);
@@ -86,7 +86,7 @@ int main(void) {
         int tam_lis_corr = 1;
         char* lista_corr = malloc(tam_lis_corr * sizeof(char));
         if (lista_corr == NULL) {
-            printf("Ocurrio un error al asignar memoria \n");
+            printf("Ocurrió un error al asignar memoria \n");
             return 1;
         }
         lista_corr[0] = '\0';
@@ -94,7 +94,7 @@ int main(void) {
         int tam_lis_inco = 1;
         char* lista_inco = malloc(tam_lis_inco * sizeof(char));
         if (lista_inco == NULL) {
-            printf("Ocurrio un error al asignar memoria \n");
+            printf("Ocurrió un error al asignar memoria \n");
             return 1;
         }
         lista_inco[0] = '\0';
@@ -154,7 +154,7 @@ int main(void) {
         free(lista_inco);
         free(lista_letras);
 
-        printf("\n\n Le gustaria seguir jugando \n (S)i (N)o\n : ");
+        printf("\n\n Le gustaría seguir jugando \n (S)i (N)o\n : ");
         scanf(" %c", &respuesta);
     } while(tolower(respuesta) != 'n');
 
@@ -267,7 +267,7 @@ char seleccionar_categoria() {
 #endif
 	
     printf("\n ~~~~~ Bienvenido al juego del colgado! ~~~~~\n");
-	printf("\n Introduce la categoría: \n  a) Anime \n  b) Municipios de Oaxaca \n  c) Peliculas \n  d) Musica \n  e) Paises \n : ");
+	printf("\n Introduce la categoría: \n  a) Anime \n  b) Municipios de Oaxaca \n  c) Películas \n  d) Música \n  e) Países \n : ");
 	scanf(" %c", &categoria);
 
     return tolower(categoria);
@@ -291,15 +291,15 @@ void dibujar_gui(int errores, char* frase, char* pista, char* lista_letras, char
             break;
 
         case 'c':
-            printf("Peliculas");
+            printf("Películas");
             break;
 
         case 'd':
-            printf("Musica");
+            printf("Música");
             break;
 
         case 'e':
-            printf("Paises");
+            printf("Países");
             break;
 
         default:
@@ -311,7 +311,7 @@ void dibujar_gui(int errores, char* frase, char* pista, char* lista_letras, char
     // Pista de la frase
     printf(" Pista: %s \n", pista);
 
-    // Guia de acertaje
+    // Impresión de guia
     switch (guia) {
         case 's':
             printf("\n");
@@ -415,7 +415,7 @@ void dibujar_banco_letras(char* lista_corr, char* lista_inco) {
         else {
 		    printf("%c ", i);
         }
-		//no se tiene que mover ya que le imprime '|' despues de 77 y 90␍
+		//no se tiene que mover ya que le imprime '|' después de 77 y 90␍
 		if(i == 90 || i == 77) {
 			printf("|");
 		}
