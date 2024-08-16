@@ -1,39 +1,66 @@
-#include <time.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <time.h> // Se utiliza para obtner una semilla para la generacion de un numero aleatorio 
+#include <ctype.h> // Se utiliza para llevar control de los caracteres dentro del codigo
+#include <stdio.h> // Se utiliza para imprimir y leer en la consola 
+#include <string.h> // Se usa para el control de las cadenas
+#include <stdlib.h> // Se usa para funciones basicas con malloc y para limpiar la pantalla de una consola
 
+// Compara una caracter con los contenidos de una cadena caracteres
 int en_lista(char letra, char* lista);
+// Genera un numero aleatorio a base de una semilla 
 int generar_numero();
 
+// Imprime un menu que se usa para determinar la categoria a jugar
 char seleccionar_categoria();
 
+// Toma una cadena de caracteres y extrae cada letra que aparece dentro de ella y las lista 
 char* listar_letras(char* frase);
+// Toma una cadena de caracteres y los organiza con el metodo de burbuja
 char* organizar_lista(char* lista);
+// Selecciona una linea de un archivo
 char* obtener_de_archivo(char* ruta_archivo, int numero_linea);
 
+// Imprime todo el gui completo
 void dibujar_gui(int errores, char* frase, char* pista, char* lista_letras, char* lista_corr, char* lista_inco, char guia, char categoria);
+// Imprime la parte del muñeco en el gui
 void dibujar_munieco(int errores);
+// Imprime la parte del banco de letras del gui.
 void dibujar_banco_letras(char* lista_corr, char* lista_inco);
 
+/*
+ * La funcion principal del juego, se encarga de la mayoria de la logica del juego 
+ * 
+ * Parametros: Ninguno, representado con el "void"
+ *
+ * Valores de regreso:
+ *  - 0: Ejecución exitosa
+ *  - 1: Error al asignar o reasignar memoria con malloc o realloc 
+ *  - 2: Error al abrir archivo
+ *  - 3: Error al elegir una categoria inexistente
+*/
 int main(void) {
-    char letra;
+    // Usadas para llevar control de la entrada del jugador
+    char letra; 
     char respuesta;
 
+    // Ciclo que continua el juego hasta que el juego determine que el jugador a ganado o perdido usando una variable tipo int como booleano
     do {
-        int salir = 0;
-        int errores = 0;
+        // Usadas para llevar el control de partes del juego
+        int salir = 0; // Usado para determinarsi el juego puede acabar
+        int errores = 0; // LLeva control de los errores registrados
 
-        int numero_aleatorio = generar_numero();
+        int numero_aleatorio = generar_numero(); 
 
-        char guia = 's';
+        char guia = 's'; // Se usa para control el mensaje de guia en la GUI.
 
-        char* archivo_frase;
-        char* archivo_pista;
+        char* archivo_frase; // Cadena que contiene la ruta al archivo de frase de la categoria seleccionada
+        char* archivo_pista; // Cadena que contiene la ruta al archivo de pista correspondiente a la frase
 
         char categoria = seleccionar_categoria();
 
+        /*
+         * Asigna las rutas adecuadas a base de la categoria seleccionada,
+         * cierra el programa con un valor correspondiente si una categoria no es seleccionada correctamente
+        */
         switch (categoria) {
             case 'a':
                 archivo_frase = "./categorias/anime.txt";
@@ -65,17 +92,34 @@ int main(void) {
                 return 3;
         }
 
+        /*
+         * Obtine la frase del archivo correspondiente a la categoria seleccionada,
+         * lee el contenido de la cadena y determina si un error sucedio al momento de conseguir la frase,
+         * si es el caso imprime un mensaje de error y cierra el programa con el valor correspondiente.
+        */
         char* frase = obtener_de_archivo(archivo_frase, numero_aleatorio);
         if (frase == NULL) {
             printf("Ocurrió un error al abrir el archivo\n");
             return 2;
         }
+
+        /*
+         * Obtine la pista del archivo correspondiente a la categoria seleccionada,
+         * lee el contenido de la cadena y determina si un error sucedio al momento de conseguir la pista,
+         * si es el caso imprime un mensaje de error y cierra el programa con el valor correspondiente.
+        */
         char* pista = obtener_de_archivo(archivo_pista, numero_aleatorio);
         if (pista == NULL) {
             printf("Ocurrió un error al abrir el archivo\n");
             return 2;
         }
 
+        /*
+         * Toma la fresa correspondiente y lista en un lista sin repetir,
+         * lee el contenido de la cadena y determina si un error sucedio al momento de listar las letras
+         * si es el caso imprime un mensaje de error y cierra el programa con el valor correspondiente,
+         * si no es el caso entonces organiza las letras de manera alfabetica con el metodo de burbuja.
+        */
         char* lista_letras = listar_letras(frase);
         if (lista_letras == NULL) {
             printf("Ocurrió un error al asignar memoria \n");
