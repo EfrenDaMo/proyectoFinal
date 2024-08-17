@@ -4,7 +4,7 @@
 #include <string.h> // Se usa para el control de las cadenas
 #include <stdlib.h> // Se usa para funciones basicas con malloc y para limpiar la pantalla de una consola
 
-// Compara una caracter con los contenidos de una cadena caracteres
+// Compara una carácter con los contenidos de una cadena caracteres
 int en_lista(char letra, char* lista);
 // Genera un numero aleatorio a base de una semilla 
 int generar_numero(void);
@@ -14,7 +14,7 @@ char seleccionar_categoria(void);
 
 // Toma una cadena de caracteres y extrae cada letra que aparece dentro de ella y las lista 
 char* listar_letras(char* frase);
-// Toma una cadena de caracteres y los organiza con el metodo de burbuja
+// Toma una cadena de caracteres y los organiza con el método de burbuja
 char* organizar_lista(char* lista);
 // Selecciona una linea de un archivo
 char* obtener_de_archivo(char* ruta_archivo, int numero_linea);
@@ -27,9 +27,9 @@ void dibujar_munieco(int errores);
 void dibujar_banco_letras(char* lista_corr, char* lista_inco);
 
 /*
- * La funcion principal del juego, se encarga de la mayoria de la logica del juego 
+ * La función principal del juego, se encarga de la mayoría de la lógica del juego 
  * 
- * Parametros: Ninguno, representado con el "void"
+ * Parámetros: Ninguno, representado con el "void"
  *
  * Valores de regreso:
  *  - 0: Ejecución exitosa
@@ -45,7 +45,7 @@ int main(void) {
     // Ciclo que continua el juego hasta que el juego determine que el jugador a ganado o perdido usando una variable tipo int como booleano
     do {
         // Usadas para llevar el control de partes del juego
-        int salir = 0; // Usado para determinarsi el juego puede acabar
+        int salir = 0; // Usado para determinar si el juego puede acabar
         int errores = 0; // LLeva control de los errores registrados
 
         int numero_aleatorio = generar_numero(); 
@@ -97,8 +97,8 @@ int main(void) {
         }
 
         /*
-         * Obtine la frase del archivo correspondiente a la categoria seleccionada,
-         * lee el contenido de la cadena y determina si un error sucedio al momento de conseguir la frase,
+         * Obtiene la frase del archivo correspondiente a la categoria seleccionada,
+         * lee el contenido de la cadena y determina si un error sucedió al momento de conseguir la frase,
          * si es el caso imprime un mensaje de error y cierra el programa con el valor correspondiente.
         */
         char* frase = obtener_de_archivo(archivo_frase, numero_aleatorio);
@@ -108,8 +108,8 @@ int main(void) {
         }
 
         /*
-         * Obtine la pista del archivo correspondiente a la categoria seleccionada,
-         * lee el contenido de la cadena y determina si un error sucedio al momento de conseguir la pista,
+         * Obtiene la pista del archivo correspondiente a la categoria seleccionada,
+         * lee el contenido de la cadena y determina si un error sucedió al momento de conseguir la pista,
          * si es el caso imprime un mensaje de error y cierra el programa con el valor correspondiente.
         */
         char* pista = obtener_de_archivo(archivo_pista, numero_aleatorio);
@@ -120,9 +120,9 @@ int main(void) {
 
         /*
          * Toma la frase correspondiente y lista en un lista sin repetir,
-         * lee el contenido de la cadena y determina si un error sucedio al momento de listar las letras,
+         * lee el contenido de la cadena y determina si un error sucedió al momento de listar las letras,
          * si es el caso imprime un mensaje de error y cierra el programa con el valor correspondiente,
-         * si no es el caso entonces organiza las letras de manera alfabetica con el metodo de burbuja.
+         * si no es el caso entonces organiza las letras de manera alfabética con el método de burbuja.
         */
         char* lista_letras = listar_letras(frase);
         if (lista_letras == NULL) {
@@ -132,10 +132,10 @@ int main(void) {
         lista_letras = organizar_lista(lista_letras);
 
         /*
-         * Crea una cadena de caracteres a base de memoria con la suficiente para poder resguadar un caracter,
-         * se lee el contenido de la cadena y a base del valor de la variable se determina si sucedio algun error,
+         * Crea una cadena de caracteres a base de memoria con la suficiente para poder resguardar un carácter,
+         * se lee el contenido de la cadena y a base del valor de la variable se determina si sucedió algún error,
          * si es el caso se imprime un mensaje de error y se cierra el programa con valor de regreso correspondiente,
-         * si no es el caso se dentro de la memoria se asigna un caracter nulo para evitar algun problema mas adelante.
+         * si no es el caso se dentro de la memoria se asigna un carácter nulo para evitar algún problema mas adelante.
         */
         int tam_lis_corr = 1;
         char* lista_corr = malloc(tam_lis_corr * sizeof(char));
@@ -146,10 +146,10 @@ int main(void) {
         lista_corr[0] = '\0';
 
         /*
-         * Crea una cadena de caracteres a base de memoria con la suficiente para poder resguadar un caracter,
-         * se lee el contenido de la cadena y a base del valor de la variable se determina si sucedio algun error,
+         * Crea una cadena de caracteres a base de memoria con la suficiente para poder resguardar un carácter,
+         * se lee el contenido de la cadena y a base del valor de la variable se determina si sucedió algún error,
          * si es el caso se imprime un mensaje de error y se cierra el programa con valor de regreso correspondiente,
-         * si no es el caso se dentro de la memoria se asigna un caracter nulo para evitar algun problema mas adelante.
+         * si no es el caso se dentro de la memoria se asigna un carácter nulo para evitar alguna problema mas adelante.
         */
         int tam_lis_inco = 1;
         char* lista_inco = malloc(tam_lis_inco * sizeof(char));
@@ -160,7 +160,7 @@ int main(void) {
         lista_inco[0] = '\0';
 
         do {
-            // Llama la funcion que dibuja la GUI principal pasando las variables de control previamente establecidas como paramentros.
+            // Llama la función que dibuja la GUI principal pasando las variables de control previamente establecidas como parámetros.
             dibujar_gui(errores, frase, pista, lista_letras, lista_corr, lista_inco, guia, categoria);
             
             printf(": ");
@@ -171,7 +171,7 @@ int main(void) {
              * se asigna a la lista correspondiente dependiendo si se encuentra en la lista o no,
              * se hace una ultima revision con la lista a la que se va a asignar para determinar si ya fue intentada o no,
              * se incrementa el tamaño de la lista correspondiente y se le asigna mas memoria y se repite la verificación de errores,
-             * la letra se asigna a la lista correspondiente y mueve el caracter nulo al final de la lista.
+             * la letra se asigna a la lista correspondiente y mueve el carácter nulo al final de la lista.
             */
             if(en_lista(tolower(letra), lista_letras)) {
                 if(en_lista(tolower(letra), lista_corr))
@@ -204,11 +204,11 @@ int main(void) {
                     lista_inco[tam_lis_inco - 1] = '\0';
                 }
             }
-            // Se organiza la lista de letras adivinadas correctamente para facilitar la comparacion
+            // Se organiza la lista de letras adivinadas correctamente para facilitar la comparación
             lista_corr = organizar_lista(lista_corr);
             
             /*
-             * Se determina si se puede cerrar el juego verificando las condiciones de finalizacion,
+             * Se determina si se puede cerrar el juego verificando las condiciones de finalización,
              * condiciones:
              *  - 6 errores
              *  - La lista de letras de la frase y la lista de letras adivinadas correctamente son iguales.
@@ -243,15 +243,15 @@ int main(void) {
 }
 
 /*
- * Se usa para determinar si una caracter se encuentra de una lista de cadenas.
+ * Se usa para determinar si una carácter se encuentra de una lista de cadenas.
  * 
- * Parametros:
- *  - char letra: Caracter por buscar dentro de la cadena
+ * Parámetros:
+ *  - char letra: Carácter por buscar dentro de la cadena
  *  - char* lista: Cadena de caracteres a la que se va comparar
  *
  * Valores de regreso:
- *  - 0: No se encontro la letra dentro de la lista
- *  - 1: Se encontro la letra dentro de la lista
+ *  - 0: No se encontró la letra dentro de la lista
+ *  - 1: Se encontró la letra dentro de la lista
 */
 int en_lista(char letra, char* lista) {
     for (int i = 0; i < strlen(lista); i++) {
@@ -262,9 +262,9 @@ int en_lista(char letra, char* lista) {
 }
 
 /*
- * Genera un numero a base de una semilla seleccionada con relacion al tiempo
+ * Genera un numero a base de una semilla seleccionada con relación al tiempo
  * 
- * Parametros: Ninguno, representado con el "void"
+ * Parámetros: Ninguno, representado con el "void"
  *
  * Valores de regreso: Un numero aleatorio de 1-10
 */
@@ -274,9 +274,9 @@ int generar_numero(void) {
 }
 
 /*
- * Imprime un menu y le permite seleccionar al usuario su opcion
+ * Imprime un menu y le permite seleccionar al usuario su opción
  * 
- * Parametros: Ninguno, representado con el "void"
+ * Parámetros: Ninguno, representado con el "void"
  *
  * Valores de regreso: La letra correspondiente a la categoria seleccionada por el usuario
 */
@@ -294,17 +294,17 @@ char seleccionar_categoria(void) {
     printf("\n Introduce la categoría: \n  a) Anime \n  b) Municipios de Oaxaca \n  c) Películas \n  d) Música \n  e) Países \n  q) Salir \n : ");
     scanf(" %c", &categoria);
 
-    return tolower(categoria); // Regresa la letra correspondiente a la categoria seleccionada como minuscula.
+    return tolower(categoria); // Regresa la letra correspondiente a la categoria seleccionada como minúscula.
 }
 
 /*
  * Crea una lista a base de las letras dentro de una cadena de caracteres.
  * 
- * Parametros:
+ * Parámetros:
  *  - char* frase: Cadena de caracteres de la cual se va a formar la lista.
  *
  * Valores de regreso:
- *  - lista: Una lista compuestas con las letras del parametro sin repetir
+ *  - lista: Una lista compuestas con las letras del parámetro sin repetir
  *  - NULL: Error al momento de asignar o reasignar memoria 
 */
 char* listar_letras(char* frase) {
@@ -331,13 +331,13 @@ char* listar_letras(char* frase) {
 }
 
 /*
- * Organiza una lista en orden alfabetico via el uso del metodo de burbuja.
+ * Organiza una lista en orden alfabético via el uso del método de burbuja.
  * 
- * Parametros:
+ * Parámetros:
  *  - char* lista: Cadena de caracteres que se quiere organizar
  *
  * Valores de regreso:
- *  - lista: La lista organizada de forma alfabetica
+ *  - lista: La lista organizada de forma alfabética
 */
 char* organizar_lista(char* lista) {
     for(int i = 0; i < strlen(lista); i++) {
@@ -355,8 +355,8 @@ char* organizar_lista(char* lista) {
 /*
  * Obtiene el contenido de una linea especifica de un archivo a base de su ruta.
  * 
- * Parametros:
- *  - char* ruta_archivo: Contiene la ruta al archivo que se deasea abrir.
+ * Parámetros:
+ *  - char* ruta_archivo: Contiene la ruta al archivo que se desea abrir.
  *  - int numero_linea: Es el numero de la linea que se desea elegir.
  *
  * Valores de regreso:
@@ -384,7 +384,7 @@ char* obtener_de_archivo(char* ruta_archivo, int numero_linea) {
     if (archivo == NULL) 
         return NULL;
 
-    // Obtiene la linea indicada que es especificada por el parametro "numero_linea"
+    // Obtiene la linea indicada que es especificada por el parámetro "numero_linea"
     while (fgets(linea, TAM_MAX, archivo) != NULL) {
         contador_linea++;
         if (contador_linea == numero_linea) {
@@ -394,7 +394,7 @@ char* obtener_de_archivo(char* ruta_archivo, int numero_linea) {
 
     fclose(archivo); // Cierra el archivo para evitar problemas de memoria
 
-    // Obtine todo el contenido antes del '.' en la linea
+    // Obtiene todo el contenido antes del '.' en la linea
     for (int i = 0; linea[i] != '.'; i++) {
         tam_regreso++;
 
@@ -412,7 +412,7 @@ char* obtener_de_archivo(char* ruta_archivo, int numero_linea) {
 /*
  * Imprime la GUI completa utilizando las otras dos partes
  * 
- * Parametros:
+ * Parámetros:
  *  - int errores: Cantidad de errores cometidos
  *  - char* frase: La frase seleccionada aleatoriamente de la categoria seleccionada
  *  - char* pista: La pista correspondiente a la frase 
@@ -494,10 +494,10 @@ void dibujar_gui(int errores, char* frase, char* pista, char* lista_letras, char
 
     dibujar_munieco(errores);
 
-    // Imprime los errores con el parametro y las letras Faltantes que es la diferencia entre la lista principal y la lista de letras correctas
+    // Imprime los errores con el parámetro y las letras Faltantes que es la diferencia entre la lista principal y la lista de letras correctas
     printf(" Errores: %i \t Letras Faltantes: %lu\n", errores, (strlen(lista_letras) - strlen(lista_corr)) );
 
-    // Imprime los espacios vacios por llenar de la frase 
+    // Imprime los espacios vacíos por llenar de la frase 
     printf("\n\t");
     for (int i = 0; i < strlen(frase); i++) {
         if(!isalpha(frase[i]))
@@ -519,7 +519,7 @@ void dibujar_gui(int errores, char* frase, char* pista, char* lista_letras, char
 /*
  * Imprime el muñeco y la ahorca a base de los errores del jugador
  * 
- * Parametros:
+ * Parámetro:
  *  - int errores: El numero de errores cometidos por el jugador
  *
  * Valores de regreso: Ninguno, representado con el "void"
@@ -556,7 +556,7 @@ void dibujar_munieco(int errores) {
 /*
  * Imprime el banco de letras a base de unas condiciones
  * 
- * Parametros:
+ * Parámetros:
  *  - char* lista_corr: La lista de letras adivinadas correctamente
  *  - char* lista_inco: La lista de letras adivinadas incorrectamente
  *
