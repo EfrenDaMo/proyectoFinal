@@ -7,10 +7,10 @@
 // Compara una caracter con los contenidos de una cadena caracteres
 int en_lista(char letra, char* lista);
 // Genera un numero aleatorio a base de una semilla 
-int generar_numero();
+int generar_numero(void);
 
 // Imprime un menu que se usa para determinar la categoria a jugar
-char seleccionar_categoria();
+char seleccionar_categoria(void);
 
 // Toma una cadena de caracteres y extrae cada letra que aparece dentro de ella y las lista 
 char* listar_letras(char* frase);
@@ -87,6 +87,10 @@ int main(void) {
                 archivo_pista = "./pistas/paises.txt";
                 break;
 
+            case 'q':
+                printf("Entendido cerrando el programa \n");
+                return 0;
+
             default:
                 printf("Categoría no reconocida.\n");
                 return 3;
@@ -115,18 +119,24 @@ int main(void) {
         }
 
         /*
-         * Toma la fresa correspondiente y lista en un lista sin repetir,
-         * lee el contenido de la cadena y determina si un error sucedio al momento de listar las letras
+         * Toma la frase correspondiente y lista en un lista sin repetir,
+         * lee el contenido de la cadena y determina si un error sucedio al momento de listar las letras,
          * si es el caso imprime un mensaje de error y cierra el programa con el valor correspondiente,
          * si no es el caso entonces organiza las letras de manera alfabetica con el metodo de burbuja.
         */
         char* lista_letras = listar_letras(frase);
         if (lista_letras == NULL) {
             printf("Ocurrió un error al asignar memoria \n");
-            return 1;
+            return 1; 
         }
         lista_letras = organizar_lista(lista_letras);
 
+        /*
+         * Crea una cadena de caracteres a base de memoria con la suficiente para poder resguadar un caracter,
+         * se lee el contenido de la cadena y a base del valor de la variable se determina si sucedio algun error,
+         * si es el caso se imprime un mensaje de error y se cierra el programa con valor de regreso correspondiente,
+         * si no es el caso se dentro de la memoria se asigna un caracter nulo para evitar algun problema mas adelante.
+        */
         int tam_lis_corr = 1;
         char* lista_corr = malloc(tam_lis_corr * sizeof(char));
         if (lista_corr == NULL) {
@@ -135,6 +145,12 @@ int main(void) {
         }
         lista_corr[0] = '\0';
 
+        /*
+         * Crea una cadena de caracteres a base de memoria con la suficiente para poder resguadar un caracter,
+         * se lee el contenido de la cadena y a base del valor de la variable se determina si sucedio algun error,
+         * si es el caso se imprime un mensaje de error y se cierra el programa con valor de regreso correspondiente,
+         * si no es el caso se dentro de la memoria se asigna un caracter nulo para evitar algun problema mas adelante.
+        */
         int tam_lis_inco = 1;
         char* lista_inco = malloc(tam_lis_inco * sizeof(char));
         if (lista_inco == NULL) {
@@ -144,44 +160,64 @@ int main(void) {
         lista_inco[0] = '\0';
 
         do {
+            // Llama la funcion que dibuja la GUI principal pasando las variables de control previamente establecidas como paramentros.
             dibujar_gui(errores, frase, pista, lista_letras, lista_corr, lista_inco, guia, categoria);
             
             printf(": ");
             scanf(" %c", &letra);
 
+            /*
+             * Se compara la letra introducida por el jugador a la cadena que contiene la lista de las letras en la frase,
+             * se asigna a la lista correspondiente dependiendo si se encuentra en la lista o no,
+             * se hace una ultima revision con la lista a la que se va a asignar para determinar si ya fue intentada o no,
+             * se incrementa el tamaño de la lista correspondiente y se le asigna mas memoria y se repite la verificación de errores,
+             * la letra se asigna a la lista correspondiente y mueve el caracter nulo al final de la lista.
+            */
             if(en_lista(tolower(letra), lista_letras)) {
-                if(en_lista(tolower(letra), lista_corr)) {
-                    printf("\nYa fue adivinada \n");
+                if(en_lista(tolower(letra), lista_corr))
                     guia = 'a';
-                }
                 else {
                     guia = 'c';
                     tam_lis_corr++;
-                    lista_corr = realloc(lista_corr,(tam_lis_corr * sizeof(char)));
+                    lista_corr = realloc(lista_corr,(tam_lis_corr * sizeof(char)));            
+                    if (lista_corr == NULL) {
+                        printf("Ocurrió un error al asignar memoria \n");
+                        return 1;
+                    }
                     lista_corr[tam_lis_corr - 2] = tolower(letra);
                     lista_corr[tam_lis_corr - 1] = '\0';
                 }
             }
             else if(!en_lista(tolower(letra), lista_letras)) {
-                if(en_lista(tolower(letra), lista_inco)) { 
-                    printf("\nYa fue adivinada \n");
+                if(en_lista(tolower(letra), lista_inco)) 
                     guia = 'a';
-                }
                 else {
                     guia = 'i';
                     errores++;
                     tam_lis_inco++;
                     lista_inco = realloc(lista_inco,(tam_lis_inco * sizeof(char)));
+                    if (lista_inco == NULL) {
+                        printf("Ocurrió un error al asignar memoria \n");
+                        return 1;
+                    }
                     lista_inco[tam_lis_inco - 2] = tolower(letra);
                     lista_inco[tam_lis_inco - 1] = '\0';
                 }
             }
+            // Se organiza la lista de letras adivinadas correctamente para facilitar la comparacion
             lista_corr = organizar_lista(lista_corr);
-
+            
+            /*
+             * Se determina si se puede cerrar el juego verificando las condiciones de finalizacion,
+             * condiciones:
+             *  - 6 errores
+             *  - La lista de letras de la frase y la lista de letras adivinadas correctamente son iguales.
+             *  Se actualiza adecuadamente el GUI ya que al evaluar se cierra completamente el ciclo.
+            */
             if(!strcmp(lista_corr, lista_letras)) {
                 salir = 1;
                 guia = 'g';
-                errores = -1;
+                errores = -1; // Hecho para que active la caso default en el switch case utilizado.
                 dibujar_gui(errores, frase, pista, lista_letras, lista_corr, lista_inco, guia, categoria);
             }
             else if(errores == 6) {
@@ -192,6 +228,7 @@ int main(void) {
 
         } while (salir != 1);
 
+        // Libera todas las variables que son apuntadores para que se libere la memoria correspondiente
         free(frase);
         free(pista);
         free(lista_corr);
@@ -205,6 +242,17 @@ int main(void) {
    return 0;
 }
 
+/*
+ * Se usa para determinar si una caracter se encuentra de una lista de cadenas.
+ * 
+ * Parametros:
+ *  - char letra: Caracter por buscar dentro de la cadena
+ *  - char* lista: Cadena de caracteres a la que se va comparar
+ *
+ * Valores de regreso:
+ *  - 0: No se encontro la letra dentro de la lista
+ *  - 1: Se encontro la letra dentro de la lista
+*/
 int en_lista(char letra, char* lista) {
     for (int i = 0; i < strlen(lista); i++) {
         if (letra == lista[i])
@@ -213,26 +261,64 @@ int en_lista(char letra, char* lista) {
     return 0;
 }
 
-int generar_numero() {
+/*
+ * Genera un numero a base de una semilla seleccionada con relacion al tiempo
+ * 
+ * Parametros: Ninguno, representado con el "void"
+ *
+ * Valores de regreso: Un numero aleatorio de 1-10
+*/
+int generar_numero(void) {
     srand(time(NULL));
     return rand() % 10 + 1;
 }
 
+/*
+ * Imprime un menu y le permite seleccionar al usuario su opcion
+ * 
+ * Parametros: Ninguno, representado con el "void"
+ *
+ * Valores de regreso: La letra correspondiente a la categoria seleccionada por el usuario
+*/
+char seleccionar_categoria(void) {
+    char categoria;
+
+// Se usa para determinar el sistema operativo del jugador para limpiar correctamente la terminal
+#ifdef _WIN32
+    system("cls");
+#elif __linux__
+    system("clear");
+#endif
+
+    printf("\n ~~~~~ Bienvenido al juego del colgado! ~~~~~\n");
+    printf("\n Introduce la categoría: \n  a) Anime \n  b) Municipios de Oaxaca \n  c) Películas \n  d) Música \n  e) Países \n  q) Salir \n : ");
+    scanf(" %c", &categoria);
+
+    return tolower(categoria); // Regresa la letra correspondiente a la categoria seleccionada como minuscula.
+}
+
+/*
+ * Crea una lista a base de las letras dentro de una cadena de caracteres.
+ * 
+ * Parametros:
+ *  - char* frase: Cadena de caracteres de la cual se va a formar la lista.
+ *
+ * Valores de regreso:
+ *  - lista: Una lista compuestas con las letras del parametro sin repetir
+ *  - NULL: Error al momento de asignar o reasignar memoria 
+*/
 char* listar_letras(char* frase) {
     int tam_lista = 1;
 
     char* lista = malloc(tam_lista * sizeof(char));
     if (lista == NULL) 
         return NULL;
-    lista[0] = '\0';
+    lista[tam_lista - 1] = '\0';
 
     for (int i = 0; i < strlen(frase); i++) {
-        if (!isalpha(frase[i]))
-            continue;
-
-        if (!en_lista(tolower(frase[i]), lista)) {
+        if (isalpha(frase[i]) && !en_lista(tolower(frase[i]), lista)) {
             tam_lista++;
-
+            
             lista = realloc(lista, (tam_lista * sizeof(char)));
             if (lista == NULL) 
                 return NULL;
@@ -241,10 +327,18 @@ char* listar_letras(char* frase) {
             lista[tam_lista - 1] = '\0';
         }
     }
-
     return lista;
 }
 
+/*
+ * Organiza una lista en orden alfabetico via el uso del metodo de burbuja.
+ * 
+ * Parametros:
+ *  - char* lista: Cadena de caracteres que se quiere organizar
+ *
+ * Valores de regreso:
+ *  - lista: La lista organizada de forma alfabetica
+*/
 char* organizar_lista(char* lista) {
     for(int i = 0; i < strlen(lista); i++) {
         for (int j = i + 1; j < strlen(lista); j++) {
@@ -258,6 +352,19 @@ char* organizar_lista(char* lista) {
     return lista;
 }
 
+/*
+ * Obtiene el contenido de una linea especifica de un archivo a base de su ruta.
+ * 
+ * Parametros:
+ *  - char* ruta_archivo: Contiene la ruta al archivo que se deasea abrir.
+ *  - int numero_linea: Es el numero de la linea que se desea elegir.
+ *
+ * Valores de regreso:
+ *  - linea_regreso: Una version optima de la linea del archivo seleccionado.
+ *
+ * Nota: Es necesario realizar el procedimiento de malloc para evitar el problema de
+ * imprimir caracteres de sobra que hayan quedado registrados en el arreglo "linea".
+*/
 char* obtener_de_archivo(char* ruta_archivo, int numero_linea) {
     const int TAM_MAX = 212;
 
@@ -272,21 +379,22 @@ char* obtener_de_archivo(char* ruta_archivo, int numero_linea) {
 
     FILE *archivo;
 
+    // Abre el archivo en modo lectura indicado por el "r", y regresa NULL en caso de que suceda un error
     archivo = fopen(ruta_archivo, "r");
-    if (archivo == NULL) {
+    if (archivo == NULL) 
         return NULL;
-    }
 
+    // Obtiene la linea indicada que es especificada por el parametro "numero_linea"
     while (fgets(linea, TAM_MAX, archivo) != NULL) {
         contador_linea++;
-
         if (contador_linea == numero_linea) {
             break; 
         }
     }
 
-    fclose(archivo);
+    fclose(archivo); // Cierra el archivo para evitar problemas de memoria
 
+    // Obtine todo el contenido antes del '.' en la linea
     for (int i = 0; linea[i] != '.'; i++) {
         tam_regreso++;
 
@@ -301,22 +409,21 @@ char* obtener_de_archivo(char* ruta_archivo, int numero_linea) {
     return linea_regreso;
 }
 
-char seleccionar_categoria() {
-	char categoria;
-
-#ifdef _WIN32
-    system("cls");
-#elif __linux__
-    system("clear");
-#endif
-	
-    printf("\n ~~~~~ Bienvenido al juego del colgado! ~~~~~\n");
-	printf("\n Introduce la categoría: \n  a) Anime \n  b) Municipios de Oaxaca \n  c) Películas \n  d) Música \n  e) Países \n : ");
-	scanf(" %c", &categoria);
-
-    return tolower(categoria);
-}
-
+/*
+ * Imprime la GUI completa utilizando las otras dos partes
+ * 
+ * Parametros:
+ *  - int errores: Cantidad de errores cometidos
+ *  - char* frase: La frase seleccionada aleatoriamente de la categoria seleccionada
+ *  - char* pista: La pista correspondiente a la frase 
+ *  - char* lista_letras: La lista de las letras en la frase
+ *  - char* lista_corr: La lista de letras adivinadas correctamente
+ *  - char* lista_inco: La lista de letras adivinadas incorrectamente
+ *  - char guia: Guia de la ultima acción realizada
+ *  - char categoria: Categoría seleccionada por el jugador
+ *
+ * Valores de regreso: Ninguno, representado con el "void"
+*/
 void dibujar_gui(int errores, char* frase, char* pista, char* lista_letras, char* lista_corr, char* lista_inco, char guia, char categoria) {
 #ifdef _WIN32
     system("cls");
@@ -378,7 +485,7 @@ void dibujar_gui(int errores, char* frase, char* pista, char* lista_letras, char
         break;
 
         case 'a':
-            printf("\tYa fue adivinada \n");
+            printf("\tYa fue intentada \n");
         break;
 
         default:
@@ -387,8 +494,10 @@ void dibujar_gui(int errores, char* frase, char* pista, char* lista_letras, char
 
     dibujar_munieco(errores);
 
+    // Imprime los errores con el parametro y las letras Faltantes que es la diferencia entre la lista principal y la lista de letras correctas
     printf(" Errores: %i \t Letras Faltantes: %lu\n", errores, (strlen(lista_letras) - strlen(lista_corr)) );
 
+    // Imprime los espacios vacios por llenar de la frase 
     printf("\n\t");
     for (int i = 0; i < strlen(frase); i++) {
         if(!isalpha(frase[i]))
@@ -400,19 +509,21 @@ void dibujar_gui(int errores, char* frase, char* pista, char* lista_letras, char
     }
     printf("\n");
 
-    if(guia == 'p') {
-        printf("\t");
-
-        for (int i = 0; i < strlen(frase); i++) {
-            printf("%c", frase[i]);
-        }
-
-        printf("\n");
-    }
+    // Si el jugador ha perdido imprime la frase correcta
+    if(guia == 'p') 
+        printf("\t%s \n", frase);
 
     dibujar_banco_letras(lista_corr, lista_inco);
 }
 
+/*
+ * Imprime el muñeco y la ahorca a base de los errores del jugador
+ * 
+ * Parametros:
+ *  - int errores: El numero de errores cometidos por el jugador
+ *
+ * Valores de regreso: Ninguno, representado con el "void"
+*/
 void dibujar_munieco(int errores) {
     switch (errores) {
         case 0:
@@ -436,25 +547,36 @@ void dibujar_munieco(int errores) {
         case 6:
             printf("\t   _____ \n \t   |   | \n \t   |   X \n \t   |  -|- \n \t   |  / \\ \n \t ----- \n");
             break;
-        default:
+        default: // Caso especial para el caso de ganar pude ser activado por un numero fuera del rango 0-6
             printf("\t   _____ \n \t   |     \n \t   |     \n \t   |    O \n \t   |   -|- \n \t ----- / \\ \n");
             break;
     }
 }
 
+/*
+ * Imprime el banco de letras a base de unas condiciones
+ * 
+ * Parametros:
+ *  - char* lista_corr: La lista de letras adivinadas correctamente
+ *  - char* lista_inco: La lista de letras adivinadas incorrectamente
+ *
+ * Valores de regreso: Ninguno, representado con el "void"
+ *
+ * Nota: Imprime un '*' si la letra ya fue intentada y fue correcta,
+ * Imprime un '/' si la letra ya fue intentada y fue incorrecta.
+*/
 void dibujar_banco_letras(char* lista_corr, char* lista_inco) {
     printf(" -----------------------------");
-
 	for(int i = 65; i <= 90; i++) {
 		if(i == 78||i == 65) {
 			printf("\n | ");
 		}
 		
         if(en_lista(tolower(i), lista_corr)) {
-		    printf("1 ");
+		    printf("* ");
         }
         else if(en_lista(tolower(i), lista_inco)) {
-            printf("0 ");
+            printf("/ ");
         }
         else {
 		    printf("%c ", i);
@@ -464,7 +586,7 @@ void dibujar_banco_letras(char* lista_corr, char* lista_inco) {
 			printf("|");
 		}
 	}
-	
 	printf("\n");
 	printf(" -----------------------------\n");
 }
+
