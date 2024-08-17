@@ -495,7 +495,7 @@ void dibujar_gui(int errores, char* frase, char* pista, char* lista_letras, char
     dibujar_munieco(errores);
 
     // Imprime los errores con el parámetro y las letras Faltantes que es la diferencia entre la lista principal y la lista de letras correctas
-    printf(" Errores: %i \t Letras Faltantes: %lu\n", errores, (strlen(lista_letras) - strlen(lista_corr)) );
+    printf(" Errores: %i \t Letras Faltantes: %llu\n", errores, (strlen(lista_letras) - strlen(lista_corr)) );
 
     // Imprime los espacios vacíos por llenar de la frase 
     printf("\n\t");
